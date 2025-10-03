@@ -22,10 +22,10 @@ export const propertiesService = {
         .from('properties')
         .select(`
           *,
-          owner:users!properties_owner_id_fkey(first_name, last_name),
+          owner:user_profiles!properties_owner_id_fkey(first_name, last_name),
           reviews(rating)
         `)
-        .eq('is_active', true)
+        .eq('is_published', true)
 
       // Appliquer les filtres
       if (filters?.type && filters.type !== 'all') {
@@ -93,8 +93,8 @@ export const propertiesService = {
         .from('properties')
         .select(`
           *,
-          owner:users!properties_owner_id_fkey(first_name, last_name, profile_image),
-          reviews(*, users!reviews_guest_id_fkey(first_name, last_name))
+          owner:user_profiles!properties_owner_id_fkey(first_name, last_name),
+          reviews(*, reviewer:user_profiles!reviews_reviewer_id_fkey(first_name, last_name))
         `)
         .eq('id', id)
         .single()
