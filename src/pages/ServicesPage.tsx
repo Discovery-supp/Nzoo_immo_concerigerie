@@ -229,7 +229,7 @@ const ServicesPage: React.FC = () => {
               </p>
 
               <button className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-light transition-colors">
-                <a href={`/become-host?package=${pkg.name.toLowerCase().replace(/\s+/g, '-')}&commission=${pkg.commission}`}>
+                <a href={`/become-host?package=${encodeURIComponent(pkg.name.toLowerCase().replace(/\s+/g, '-'))}&commission=${encodeURIComponent(pkg.commission)}`}>
                   Choisir ce forfait
                 </a>
               </button>
