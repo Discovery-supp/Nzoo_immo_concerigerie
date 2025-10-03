@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import propertiesService from '../services/properties';
 import reviewsService from '../services/reviews';
+import { supabase } from '../lib/supabase';
 
 const PropertiesPage: React.FC = () => {
   const navigate = useNavigate();
