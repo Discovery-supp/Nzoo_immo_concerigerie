@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase'
 import type { Database } from '../lib/supabase'
 
-type User = Database['public']['Tables']['users']['Row']
+type UserProfile = Database['public']['Tables']['user_profiles']['Row']
 
 export const authService = {
   // Inscription
