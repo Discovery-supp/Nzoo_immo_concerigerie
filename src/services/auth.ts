@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase'
 import type { Database } from '../lib/supabase'
 
-type UserProfile = Database['public']['Tables']['user_profiles']['Row']
+type User = Database['public']['Tables']['users']['Row']
 
 export const authService = {
   // Inscription
@@ -17,35 +17,30 @@ export const authService = {
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            phone: userData.phone,
+            userType: userData.userType,
+          }
+        }
       })
 
       if (authError) throw authError
 
       if (authData.user) {
-        // Attendre un court instant pour que le trigger s'exécute
-        await new Promise(resolve => setTimeout(resolve, 500))
-
-        // Mettre à jour le profil avec les informations supplémentaires
-        const { error: updateError } = await supabase
-          .from('user_profiles')
-          .update({
-            first_name: userData.firstName,
-            last_name: userData.lastName,
-            phone: userData.phone,
-            user_type: userData.userType as any,
-          })
-          .eq('id', authData.user.id)
-
-        if (updateError) {
-          console.warn('Erreur mise à jour profil:', updateError)
-        }
-
-        // Récupérer le profil mis à jour
-        const { data: profileData } = await supabase
-          .from('user_profiles')
+        // Le trigger DB crée le profil; récupérer le profil
+        const { data: profileData, error: profileError } = await supabase
+          .from('users')
           .select('*')
           .eq('id', authData.user.id)
           .single()
+
+        if (profileError) {
+          // Si le profil n'est pas immédiatement disponible, retourner juste l'user
+          return { user: authData.user, profile: null }
+        }
 
         return { user: authData.user, profile: profileData }
       }
@@ -70,7 +65,7 @@ export const authService = {
       // Récupérer le profil utilisateur
       if (data.user) {
         const { data: profile, error: profileError } = await supabase
-          .from('user_profiles')
+          .from('users')
           .select('*')
           .eq('id', data.user.id)
           .single()
@@ -123,7 +118,7 @@ export const authService = {
 
       if (user) {
         const { data: profile, error: profileError } = await supabase
-          .from('user_profiles')
+          .from('users')
           .select('*')
           .eq('id', user.id)
           .single()
