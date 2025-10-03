@@ -13,6 +13,7 @@ export const authService = {
   }) {
     try {
       // Créer l'utilisateur dans Supabase Auth
+      // Le trigger database créera automatiquement le profil
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -21,22 +22,30 @@ export const authService = {
       if (authError) throw authError
 
       if (authData.user) {
-        // Créer le profil utilisateur dans la table user_profiles
-        const { data: profileData, error: userError } = await supabase
-          .from('user_profiles')
-          .insert([
-            {
-              id: authData.user.id,
-              first_name: userData.firstName,
-              last_name: userData.lastName,
-              phone: userData.phone,
-              user_type: userData.userType as any,
-            }
-          ])
-          .select()
-          .single()
+        // Attendre un court instant pour que le trigger s'exécute
+        await new Promise(resolve => setTimeout(resolve, 500))
 
-        if (userError) throw userError
+        // Mettre à jour le profil avec les informations supplémentaires
+        const { error: updateError } = await supabase
+          .from('user_profiles')
+          .update({
+            first_name: userData.firstName,
+            last_name: userData.lastName,
+            phone: userData.phone,
+            user_type: userData.userType as any,
+          })
+          .eq('id', authData.user.id)
+
+        if (updateError) {
+          console.warn('Erreur mise à jour profil:', updateError)
+        }
+
+        // Récupérer le profil mis à jour
+        const { data: profileData } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', authData.user.id)
+          .single()
 
         return { user: authData.user, profile: profileData }
       }
