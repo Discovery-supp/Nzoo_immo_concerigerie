@@ -14,6 +14,7 @@ import PropertyForm from './components/Forms/PropertyForm';
 import BookingForm from './components/Forms/BookingForm';
 import HostForm from './components/Forms/HostForm';
 import ProviderForm from './components/Forms/ProviderForm';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
   // Simulation d'un utilisateur connecté pour la démo
@@ -50,7 +51,9 @@ function App() {
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/create-property" element={<PropertyForm />} />
+            <Route path="/add-property" element={<PropertyForm />} />
             <Route path="/booking" element={<BookingForm />} />
             <Route path="/become-host" element={<HostForm />} />
             <Route path="/become-partner" element={<PartnerForm />} />

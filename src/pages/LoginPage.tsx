@@ -27,20 +27,8 @@ const LoginPage: React.FC = () => {
       const { user, profile } = await authService.signIn(formData.email, formData.password);
       
       if (user && profile) {
-        // Redirection selon le type d'utilisateur
-        switch (profile.user_type) {
-          case 'admin':
-            navigate('/admin/dashboard');
-            break;
-          case 'owner':
-            navigate('/owner/dashboard');
-            break;
-          case 'provider':
-            navigate('/provider/dashboard');
-            break;
-          default:
-            navigate('/');
-        }
+        // Redirection vers le dashboard
+        navigate('/dashboard');
       }
     } catch (error: any) {
       let errorMessage = error.message || 'Erreur de connexion';

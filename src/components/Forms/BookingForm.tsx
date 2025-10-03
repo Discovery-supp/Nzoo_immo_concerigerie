@@ -486,10 +486,15 @@ const BookingForm: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={currentStep === steps.length - 1 ? () => console.log('Submit booking', formData) : nextStep}
-                    className="px-8 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-light transition-all shadow-lg"
+                    onClick={currentStep === steps.length - 1 ? handleSubmit : nextStep}
+                    disabled={isLoading}
+                    className={`px-8 py-3 font-semibold rounded-lg transition-all shadow-lg ${
+                      isLoading
+                        ? 'bg-gray-400 text-white cursor-not-allowed'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
                   >
-                    {currentStep === steps.length - 1 ? 'Confirmer la réservation' : 'Suivant'}
+                    {isLoading ? 'Envoi...' : (currentStep === steps.length - 1 ? 'Confirmer la réservation' : 'Suivant')}
                   </button>
                 </div>
               </form>
@@ -579,16 +584,20 @@ const BookingForm: React.FC = () => {
   async function handleSubmit() {
     setIsLoading(true);
     setError('');
-    
+
     try {
       // Vérifier si l'utilisateur est connecté
       const { data: { user } } = await supabase.auth.getUser();
-      
+
+      let currentUserId = user?.id;
+
       if (!user) {
-        // Si pas connecté, créer un compte temporaire
+        // Si pas connecté, créer un compte
+        const password = `${guestInfo.email.split('@')[0]}${Math.random().toString(36).substring(2, 10)}!`;
+
         const tempUser = await authService.signUp(
           guestInfo.email,
-          'TempPassword123!',
+          password,
           {
             firstName: guestInfo.firstName,
             lastName: guestInfo.lastName,
@@ -596,16 +605,18 @@ const BookingForm: React.FC = () => {
             userType: 'traveler'
           }
         );
-        
+
         if (!tempUser?.user) {
           throw new Error('Erreur création compte');
         }
+
+        currentUserId = tempUser.user.id;
       }
 
       // Créer la réservation
       const reservationData = {
-        property_id: 'property-id-here', // À récupérer depuis l'URL ou props
-        guest_id: user?.id || '',
+        property_id: 'b8a1f7e3-4d2c-4e8a-9f3b-1c5d6e7a8b9c', // ID par défaut
+        guest_id: currentUserId || '',
         check_in: formData.checkIn?.toISOString().split('T')[0] || '',
         check_out: formData.checkOut?.toISOString().split('T')[0] || '',
         adults: formData.guests?.adults || 1,
@@ -620,11 +631,11 @@ const BookingForm: React.FC = () => {
         additional_services: formData.additionalServices || []
       };
 
-      const reservation = await reservationsService.createReservation(reservationData);
-      
+      await reservationsService.createReservation(reservationData);
+
       alert('Réservation confirmée ! Vous recevrez un email de confirmation.');
       window.location.href = '/';
-      
+
     } catch (error: any) {
       setError(error.message || 'Erreur lors de la réservation');
     } finally {
