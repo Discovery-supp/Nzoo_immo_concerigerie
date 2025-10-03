@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import PersonalInfoStep from './Steps/PersonalInfoStep';
 import PresentationStep from './Steps/PresentationStep';
 import PreparationStep from './Steps/PreparationStep';
@@ -10,10 +11,11 @@ import authService from '../../services/auth';
 import hostProfilesService from '../../services/hostProfiles';
 
 const HostForm: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [personalInfo, setPersonalInfo] = useState({
     firstName: '',
     lastName: '',
@@ -51,6 +53,22 @@ const HostForm: React.FC = () => {
 
   const [selectedPackage, setSelectedPackage] = useState('');
   const [commissionRate, setCommissionRate] = useState(0);
+
+  useEffect(() => {
+    const packageParam = searchParams.get('package');
+    const commissionParam = searchParams.get('commission');
+
+    if (packageParam) {
+      setSelectedPackage(packageParam);
+    }
+
+    if (commissionParam) {
+      const rate = parseFloat(commissionParam);
+      if (!isNaN(rate)) {
+        setCommissionRate(rate);
+      }
+    }
+  }, [searchParams]);
 
   const steps: FormStep[] = [
     {
