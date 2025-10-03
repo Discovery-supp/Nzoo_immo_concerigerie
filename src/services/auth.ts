@@ -21,13 +21,12 @@ export const authService = {
       if (authError) throw authError
 
       if (authData.user) {
-        // Créer le profil utilisateur dans la table users
+        // Créer le profil utilisateur dans la table user_profiles
         const { data: profileData, error: userError } = await supabase
-          .from('users')
+          .from('user_profiles')
           .insert([
             {
               id: authData.user.id,
-              email,
               first_name: userData.firstName,
               last_name: userData.lastName,
               phone: userData.phone,
@@ -62,7 +61,7 @@ export const authService = {
       // Récupérer le profil utilisateur
       if (data.user) {
         const { data: profile, error: profileError } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', data.user.id)
           .single()
@@ -115,7 +114,7 @@ export const authService = {
 
       if (user) {
         const { data: profile, error: profileError } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', user.id)
           .single()
