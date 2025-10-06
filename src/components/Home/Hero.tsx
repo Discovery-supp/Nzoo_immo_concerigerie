@@ -28,14 +28,14 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-primary via-primary-light to-secondary overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Carrousel d'images de fond */}
       <div className="absolute inset-0">
         {heroImages.map((image, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-30' : 'opacity-0'
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
             <img
@@ -45,7 +45,7 @@ const Hero: React.FC = () => {
             />
           </div>
         ))}
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
       </div>
 
       {/* Contrôles du carrousel */}
