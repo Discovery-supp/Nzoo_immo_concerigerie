@@ -20,11 +20,7 @@ export const propertiesService = {
     try {
       let query = supabase
         .from('properties')
-        .select(`
-          *,
-          owner:user_profiles!properties_owner_id_fkey(first_name, last_name),
-          reviews(rating)
-        `)
+        .select('*')
         .eq('is_published', true)
 
       // Appliquer les filtres
@@ -58,21 +54,30 @@ export const propertiesService = {
 
       const { data, error } = await query
 
-      if (error) throw error
+      if (error) {
+        console.error('Erreur Supabase:', error)
+        throw error
+      }
 
-      // Calculer la note moyenne pour chaque propriété
-      const propertiesWithRating = data?.map(property => {
-        const reviews = property.reviews as any[]
-        const avgRating = reviews.length > 0 
+      console.log('Properties fetched:', data?.length)
+
+      // Récupérer les reviews séparément pour chaque propriété
+      const propertiesWithRating = await Promise.all((data || []).map(async (property) => {
+        const { data: reviews } = await supabase
+          .from('reviews')
+          .select('rating')
+          .eq('property_id', property.id)
+
+        const avgRating = reviews && reviews.length > 0
           ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
           : 0
 
         return {
           ...property,
           rating: avgRating,
-          reviewsCount: reviews.length
+          reviewsCount: reviews?.length || 0
         }
-      }) || []
+      }))
 
       // Filtrer par note si spécifié
       if (filters?.minRating) {
