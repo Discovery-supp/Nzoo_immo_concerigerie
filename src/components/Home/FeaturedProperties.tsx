@@ -32,6 +32,7 @@ const FeaturedProperties: React.FC = () => {
         .limit(6);
 
       if (error) throw error;
+      console.log('Properties loaded:', data);
       setProperties(data || []);
     } catch (error) {
       console.error('Erreur lors du chargement des propriétés:', error);
@@ -71,11 +72,15 @@ const FeaturedProperties: React.FC = () => {
               href={`/properties/${property.id}`}
               className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
             >
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-64 overflow-hidden bg-gray-200">
                 <img
                   src={property.images?.[0] || 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg'}
                   alt={property.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg';
+                  }}
                 />
                 <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full shadow-lg">
                   <div className="flex items-center space-x-1">
