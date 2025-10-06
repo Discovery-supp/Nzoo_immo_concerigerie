@@ -93,16 +93,9 @@ const Hero: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Votre conciergerie premium Airbnb en RDCongo. Fini les contraintes de la location courte durée. 
+              Fini les contraintes de la location courte durée.
               <span className="font-semibold text-white"> Déléguer, c'est gagner du temps et de l'argent.</span>
             </p>
-          </div>
-
-          {/* Sous-titre */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-4xl mx-auto">
-            <h2 className="text-lg md:text-xl text-white mb-4 font-medium font-heading">
-              Notre philosophie : <span className="text-white font-semibold">L'excellence opérationnelle au service de la relation humaine</span>
-            </h2>
           </div>
 
           {/* CTAs */}
