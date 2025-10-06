@@ -21,6 +21,8 @@ const HostForm: React.FC = () => {
     lastName: '',
     email: '',
     phone: '',
+    birthDate: '',
+    profilePhoto: '',
     password: '',
     confirmPassword: ''
   });
@@ -35,9 +37,10 @@ const HostForm: React.FC = () => {
 
   const [preparationInfo, setPreparationInfo] = useState({
     hostingFrequency: '',
-    accommodationType: '',
+    accommodationType: [] as string[],
     guestTypes: [] as string[],
-    stayDuration: ''
+    stayDuration: '',
+    cancellationPolicy: ''
   });
 
   const [paymentInfo, setPaymentInfo] = useState({

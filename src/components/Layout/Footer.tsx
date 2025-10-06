@@ -9,11 +9,12 @@ const Footer: React.FC = () => {
           {/* Logo et description */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold font-heading text-white">
-              Nzoo Immo
+              N'zoo Immo Conciergerie
             </h3>
             <p className="text-sm leading-relaxed">
-              Votre conciergerie premium Airbnb en RDCongo. Nous transformons votre bien immobilier 
-              en une source de revenus optimisée et sécurisée.
+              Conciergerie Airbnb Premium en RD Congo. Nous transformons votre bien immobilier
+              en une source de revenus optimisée et sécurisée. Tout en offrant aux voyageurs
+              un service d'hébergement de qualité supérieure.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">

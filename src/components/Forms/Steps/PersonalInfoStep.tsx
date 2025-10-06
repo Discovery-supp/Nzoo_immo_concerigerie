@@ -6,6 +6,8 @@ interface PersonalInfoStepProps {
     lastName: string;
     email: string;
     phone: string;
+    birthDate: string;
+    profilePhoto: string;
     password: string;
     confirmPassword: string;
   };
@@ -20,14 +22,14 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({ data, onChange, onN
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (data.firstName && data.lastName && data.email && data.phone && data.password && data.confirmPassword) {
+    if (data.firstName && data.lastName && data.email && data.phone && data.birthDate && data.password && data.confirmPassword) {
       if (data.password === data.confirmPassword) {
         onNext();
       } else {
         alert('Les mots de passe ne correspondent pas');
       }
     } else {
-      alert('Veuillez remplir tous les champs');
+      alert('Veuillez remplir tous les champs obligatoires');
     }
   };
 
@@ -78,6 +80,43 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({ data, onChange, onN
             className="w-full px-4 py-3 border border-light-gray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             required
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-secondary mb-2">Date de naissance *</label>
+          <input
+            type="date"
+            value={data.birthDate}
+            onChange={(e) => handleInputChange('birthDate', e.target.value)}
+            className="w-full px-4 py-3 border border-light-gray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-secondary mb-2">Photo de profil (Vérification de sécurité)</label>
+          <div className="mt-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    handleInputChange('profilePhoto', reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full px-4 py-3 border border-light-gray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+            {data.profilePhoto && (
+              <div className="mt-4">
+                <img src={data.profilePhoto} alt="Aperçu" className="w-32 h-32 object-cover rounded-full mx-auto" />
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

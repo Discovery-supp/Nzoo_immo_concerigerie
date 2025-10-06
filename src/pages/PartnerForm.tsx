@@ -454,40 +454,6 @@ const PartnerForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Volume d'affaires mensuel attendu (USD)
-                </label>
-                <select
-                  value={formData.expectedVolume}
-                  onChange={(e) => handleInputChange('expectedVolume', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Sélectionner</option>
-                  <option value="0-1000">0 - 1 000 USD</option>
-                  <option value="1000-5000">1 000 - 5 000 USD</option>
-                  <option value="5000-10000">5 000 - 10 000 USD</option>
-                  <option value="10000+">Plus de 10 000 USD</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Budget marketing mensuel (USD)
-                </label>
-                <select
-                  value={formData.marketingBudget}
-                  onChange={(e) => handleInputChange('marketingBudget', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Sélectionner</option>
-                  <option value="0-500">0 - 500 USD</option>
-                  <option value="500-1000">500 - 1 000 USD</option>
-                  <option value="1000-2000">1 000 - 2 000 USD</option>
-                  <option value="2000+">Plus de 2 000 USD</option>
-                </select>
-              </div>
-            </div>
 
             <div>
               <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">

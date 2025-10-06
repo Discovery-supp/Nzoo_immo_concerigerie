@@ -87,14 +87,18 @@ const Hero: React.FC = () => {
           {/* Titre principal */}
           <div className="space-y-4">
             <h1 className="text-4xl md:text-6xl font-bold font-heading text-white leading-tight">
-              <span className="block">Nzoo Immo</span>
+              <span className="block">N'zoo Immo Conciergerie</span>
               <span className="block text-white">
-                Conciergerie Airbnb Premium
+                Airbnb Premium
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
               Fini les contraintes de la location courte durée.
               <span className="font-semibold text-white"> Déléguer, c'est gagner du temps et de l'argent.</span>
+            </p>
+            <p className="text-lg md:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed">
+              Nous transformons votre bien immobilier en une source de revenus optimisée et sécurisée.
+              Tout en offrant aux voyageurs un service d'hébergement de qualité supérieure, chaleureuse et professionnelle.
             </p>
           </div>
 

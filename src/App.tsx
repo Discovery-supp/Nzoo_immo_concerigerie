@@ -9,6 +9,7 @@ import PropertyDetailPage from './pages/PropertyDetailPage';
 import ServicesPage from './pages/ServicesPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ConsultationPage from './pages/ConsultationPage';
 import PartnerForm from './pages/PartnerForm';
 import PropertyForm from './components/Forms/PropertyForm';
 import BookingForm from './components/Forms/BookingForm';
@@ -49,6 +50,7 @@ function App() {
             <Route path="/properties" element={<PropertiesPage />} />
             <Route path="/property/:id" element={<PropertyDetailPage />} />
             <Route path="/services" element={<ServicesPage />} />
+            <Route path="/consultation" element={<ConsultationPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />

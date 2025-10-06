@@ -645,41 +645,6 @@ const ProviderForm: React.FC = () => {
                 </label>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Majoration urgences (%)
-                  </label>
-                  <input
-                    type="number"
-                    value={pricingInfo.urgencyRate}
-                    onChange={(e) => handlePricingInfoChange('urgencyRate', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Majoration soirée (%)
-                  </label>
-                  <input
-                    type="number"
-                    value={serviceInfo.eveningRate}
-                    onChange={(e) => handleServiceInfoChange('eveningRate', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Majoration week-end (%)
-                  </label>
-                  <input
-                    type="number"
-                    value={pricingInfo.weekendRate}
-                    onChange={(e) => handlePricingInfoChange('weekendRate', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
             </div>
 
             <div>
