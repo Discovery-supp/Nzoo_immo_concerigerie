@@ -96,10 +96,6 @@ const Hero: React.FC = () => {
               Fini les contraintes de la location courte durée.
               <span className="font-semibold text-white"> Déléguer, c'est gagner du temps et de l'argent.</span>
             </p>
-            <p className="text-lg md:text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed">
-              Nous transformons votre bien immobilier en une source de revenus optimisée et sécurisée.
-              Tout en offrant aux voyageurs un service d'hébergement de qualité supérieure, chaleureuse et professionnelle.
-            </p>
           </div>
 
           {/* CTAs */}
