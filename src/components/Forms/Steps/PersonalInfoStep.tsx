@@ -2,6 +2,7 @@ import React from 'react';
 
 interface PersonalInfoStepProps {
   data: {
+    civility?: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -37,7 +38,21 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({ data, onChange, onN
     <div>
       <h2 className="text-2xl font-bold text-primary mb-6">Informations personnelles</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-secondary mb-2">Civilité</label>
+            <select
+              value={data.civility || ''}
+              onChange={(e) => handleInputChange('civility', e.target.value)}
+              className="w-full px-4 py-3 border border-light-gray rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              required
+            >
+              <option value="">Sélectionner</option>
+              <option value="M">M.</option>
+              <option value="Mme">Mme</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
           <div>
             <label className="block text-sm font-medium text-secondary mb-2">Prénom</label>
             <input

@@ -11,6 +11,7 @@ const ProviderForm: React.FC = () => {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState<Partial<ServiceProvider>>({
     // Informations personnelles
+    civility: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -190,8 +191,8 @@ const ProviderForm: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Civilité</label>
                 <select
-                  value={personalInfo.gender}
-                  onChange={(e) => handlePersonalInfoChange('gender', e.target.value)}
+                  value={formData.civility}
+                  onChange={(e) => handleFormDataChange('civility', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Sélectionner</option>

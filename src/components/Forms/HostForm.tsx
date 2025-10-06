@@ -17,6 +17,7 @@ const HostForm: React.FC = () => {
   const [error, setError] = useState('');
 
   const [personalInfo, setPersonalInfo] = useState({
+    civility: '',
     firstName: '',
     lastName: '',
     email: '',
