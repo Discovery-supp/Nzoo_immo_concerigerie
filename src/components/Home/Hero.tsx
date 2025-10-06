@@ -89,7 +89,7 @@ const Hero: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-bold font-heading text-white leading-tight">
               <span className="block">Nzoo Immo</span>
               <span className="block text-white">
-                Conciergerie Premium
+                Conciergerie Airbnb Premium
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
