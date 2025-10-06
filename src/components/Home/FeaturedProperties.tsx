@@ -133,7 +133,7 @@ const FeaturedProperties: React.FC = () => {
         <div className="text-center mt-12">
           <a
             href="/properties"
-            className="inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl"
+            className="inline-block px-8 py-4 bg-[#183154] text-white font-semibold rounded-lg hover:bg-[#1a3a5f] transition-all shadow-lg hover:shadow-xl"
           >
             Voir tous les hébergements
           </a>

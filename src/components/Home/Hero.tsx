@@ -108,7 +108,7 @@ const Hero: React.FC = () => {
             </a>
             <a
               href="/booking"
-              className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-lg"
+              className="px-8 py-4 bg-[#183154] text-white font-semibold rounded-lg hover:bg-[#1a3a5f] transition-all shadow-lg"
             >
               Réserver Maintenant
             </a>
