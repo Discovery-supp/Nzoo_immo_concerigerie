@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase'
 import type { Database } from '../lib/supabase'
 
-type User = Database['public']['Tables']['users']['Row']
+type User = Database['public']['Tables']['user_profiles']['Row']
 
 export const authService = {
   // Inscription
@@ -32,10 +32,10 @@ export const authService = {
       if (authData.user) {
         // Le trigger DB crée le profil; récupérer le profil
         const { data: profileData, error: profileError } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', authData.user.id)
-          .single()
+          .maybeSingle()
 
         if (profileError) {
           // Si le profil n'est pas immédiatement disponible, retourner juste l'user
@@ -65,10 +65,10 @@ export const authService = {
       // Récupérer le profil utilisateur
       if (data.user) {
         const { data: profile, error: profileError } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', data.user.id)
-          .single()
+          .maybeSingle()
 
         if (profileError) throw profileError
 
@@ -118,10 +118,10 @@ export const authService = {
 
       if (user) {
         const { data: profile, error: profileError } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', user.id)
-          .single()
+          .maybeSingle()
 
         if (profileError) throw profileError
 

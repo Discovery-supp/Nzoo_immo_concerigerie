@@ -567,8 +567,8 @@ const ProviderForm: React.FC = () => {
                   Rayon d'intervention (Communes/Villes)
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto border border-gray-300 rounded-lg p-4">
-                  {communes.map(commune => (
-                    <label key={commune} className="flex items-center text-sm">
+                  {communes.map((commune, index) => (
+                    <label key={`${commune}-${index}`} className="flex items-center text-sm">
                       <input
                         type="checkbox"
                         checked={formData.interventionZones?.includes(commune) || false}
