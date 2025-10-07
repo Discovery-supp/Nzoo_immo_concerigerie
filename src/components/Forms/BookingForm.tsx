@@ -4,12 +4,18 @@ import Counter from '../Common/Counter';
 import { Calendar, Users, CreditCard, MapPin, Clock } from 'lucide-react';
 import { Reservation, FormStep } from '../../types';
 import reservationsService from '../../services/reservations';
+import authService from '../../services/auth';
+import paymentsService, { PaymentMethod } from '../../services/payments';
 import { supabase } from '../../lib/supabase';
 
 const BookingForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod | null>(null);
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState<any>({});
   const [formData, setFormData] = useState<Partial<Reservation>>({
     checkIn: new Date(),
     checkOut: new Date(),
@@ -55,12 +61,18 @@ const BookingForm: React.FC = () => {
     images: ["https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"]
   };
 
-  const paymentMethods = [
-    { value: 'visa', label: 'Visa' },
-    { value: 'mastercard', label: 'Mastercard' },
-    { value: 'mobile_money', label: 'Mobile Money' },
-    { value: 'cash', label: 'Espèces' }
-  ];
+  React.useEffect(() => {
+    loadPaymentMethods();
+  }, []);
+
+  const loadPaymentMethods = async () => {
+    try {
+      const methods = await paymentsService.getPaymentMethods();
+      setPaymentMethods(methods);
+    } catch (error) {
+      console.error('Error loading payment methods:', error);
+    }
+  };
 
   const additionalServices = [
     { id: 'car_rental', label: 'Location véhicule', price: 35 },
@@ -406,19 +418,120 @@ const BookingForm: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Mode de paiement</h3>
               <div className="space-y-3">
                 {paymentMethods.map(method => (
-                  <label key={method.value} className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value={method.value}
-                      checked={formData.paymentMethod === method.value}
-                      onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
-                      className="mr-3 text-blue-600"
-                    />
-                    <span className="text-gray-700">{method.label}</span>
+                  <label key={method.id} className="flex items-center justify-between p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={method.id}
+                        checked={selectedPaymentMethod?.id === method.id}
+                        onChange={() => {
+                          setSelectedPaymentMethod(method);
+                          setShowPaymentDetails(true);
+                        }}
+                        className="mr-3 text-blue-600"
+                      />
+                      <div>
+                        <span className="text-gray-900 font-medium">{method.name}</span>
+                        <span className="text-xs text-gray-500 ml-2">({method.provider})</span>
+                      </div>
+                    </div>
+                    <span className="text-sm text-gray-600 capitalize">{method.type.replace('_', ' ')}</span>
                   </label>
                 ))}
               </div>
+
+              {/* Détails de paiement selon la méthode */}
+              {showPaymentDetails && selectedPaymentMethod && (
+                <div className="mt-6 p-6 bg-gray-50 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-4">Détails de paiement - {selectedPaymentMethod.name}</h4>
+
+                  {selectedPaymentMethod.type === 'mobile_money' && (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Numéro de téléphone
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="+243 XXX XXX XXX"
+                          value={paymentDetails.phone_number || ''}
+                          onChange={(e) => setPaymentDetails({...paymentDetails, phone_number: e.target.value})}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        Vous recevrez une notification sur votre téléphone pour confirmer le paiement.
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedPaymentMethod.type === 'bank_card' && (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Numéro de carte
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="1234 5678 9012 3456"
+                          value={paymentDetails.card_number || ''}
+                          onChange={(e) => setPaymentDetails({...paymentDetails, card_number: e.target.value})}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Date d'expiration
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="MM/AA"
+                            value={paymentDetails.expiry || ''}
+                            onChange={(e) => setPaymentDetails({...paymentDetails, expiry: e.target.value})}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            CVV
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="123"
+                            maxLength={4}
+                            value={paymentDetails.cvv || ''}
+                            onChange={(e) => setPaymentDetails({...paymentDetails, cvv: e.target.value})}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedPaymentMethod.type === 'bank_transfer' && (
+                    <div className="space-y-3 text-sm text-gray-700">
+                      <p className="font-medium">Coordonnées bancaires :</p>
+                      <p>Banque : Equity BCDC</p>
+                      <p>Compte : 001-123456789-01</p>
+                      <p>SWIFT : EQBLCDKI</p>
+                      <p className="text-xs text-gray-600 mt-4">
+                        Veuillez inclure votre nom et email dans la référence du virement.
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedPaymentMethod.type === 'cash' && (
+                    <div className="space-y-2 text-sm text-gray-700">
+                      <p>Le paiement en espèces sera effectué lors du check-in.</p>
+                      <p className="text-xs text-gray-600">
+                        Veuillez préparer le montant exact : ${pricing.total.toFixed(2)}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Conditions générales */}
@@ -613,9 +726,13 @@ const BookingForm: React.FC = () => {
         currentUserId = tempUser.user.id;
       }
 
+      if (!selectedPaymentMethod) {
+        throw new Error('Veuillez sélectionner un mode de paiement');
+      }
+
       // Créer la réservation
       const reservationData = {
-        property_id: 'b8a1f7e3-4d2c-4e8a-9f3b-1c5d6e7a8b9c', // ID par défaut
+        property_id: 'b8a1f7e3-4d2c-4e8a-9f3b-1c5d6e7a8b9c',
         guest_id: currentUserId || '',
         check_in: formData.checkIn?.toISOString().split('T')[0] || '',
         check_out: formData.checkOut?.toISOString().split('T')[0] || '',
@@ -625,15 +742,46 @@ const BookingForm: React.FC = () => {
         pets: formData.guests?.pets || 0,
         total_amount: pricing.total,
         status: 'pending' as const,
-        payment_method: formData.paymentMethod || '',
+        payment_method: selectedPaymentMethod.name,
         payment_status: 'pending' as const,
         special_requests: formData.specialRequests,
         additional_services: formData.additionalServices || []
       };
 
-      await reservationsService.createReservation(reservationData);
+      const reservation = await reservationsService.createReservation(reservationData);
 
-      alert('Réservation confirmée ! Vous recevrez un email de confirmation.');
+      // Créer la transaction de paiement
+      const transactionData = {
+        reservation_id: reservation.id,
+        user_id: currentUserId || '',
+        amount: pricing.total,
+        currency: 'USD' as const,
+        payment_method_id: selectedPaymentMethod.id,
+        payment_method_type: selectedPaymentMethod.type,
+        status: 'pending' as const,
+        phone_number: paymentDetails.phone_number,
+        payment_details: paymentDetails
+      };
+
+      const transaction = await paymentsService.createTransaction(transactionData);
+
+      // Traiter le paiement
+      const paymentResult = await paymentsService.processPayment(
+        transaction.id || '',
+        selectedPaymentMethod.type,
+        paymentDetails
+      );
+
+      if (paymentResult.success) {
+        await paymentsService.updateReservationPaymentStatus(
+          reservation.id,
+          selectedPaymentMethod.type === 'cash' || selectedPaymentMethod.type === 'bank_transfer'
+            ? 'pending'
+            : 'paid'
+        );
+      }
+
+      alert(`${paymentResult.message}\n\nRéservation confirmée ! Référence: ${transaction.transaction_reference}`);
       window.location.href = '/';
 
     } catch (error: any) {
