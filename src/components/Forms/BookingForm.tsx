@@ -781,8 +781,8 @@ const BookingForm: React.FC = () => {
         );
       }
 
-      alert(`${paymentResult.message}\n\nRéservation confirmée ! Référence: ${transaction.transaction_reference}`);
-      window.location.href = '/';
+      // Rediriger vers la page de confirmation avec les détails
+      window.location.href = `/confirmation?reservation_id=${reservation.id}&transaction_id=${transaction.transaction_reference}`;
 
     } catch (error: any) {
       setError(error.message || 'Erreur lors de la réservation');

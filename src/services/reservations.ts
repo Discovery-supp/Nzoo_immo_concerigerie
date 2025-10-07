@@ -154,6 +154,27 @@ export const reservationsService = {
       console.error('Erreur récupération statistiques:', error)
       throw error
     }
+  },
+
+  // Récupérer une réservation par ID avec détails
+  async getReservationById(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from('reservations')
+        .select(`
+          *,
+          property:properties(*),
+          guest:user_profiles(*)
+        `)
+        .eq('id', id)
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Erreur récupération réservation:', error)
+      throw error
+    }
   }
 }
 
