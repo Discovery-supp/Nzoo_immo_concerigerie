@@ -43,11 +43,28 @@ const PropertiesPage: React.FC = () => {
       const enrichedProperties = await Promise.all(
         data.map(async (property) => {
           const { average, count } = await reviewsService.getPropertyAverageRating(property.id);
+
+          // Gérer les images - si c'est un chemin local, le construire correctement
+          let imageUrl = 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg';
+          if (property.images && property.images.length > 0) {
+            const firstImage = property.images[0];
+            // Si l'image commence par /, c'est un chemin local dans /public
+            if (firstImage.startsWith('/')) {
+              imageUrl = firstImage;
+            } else if (firstImage.startsWith('http')) {
+              // Si c'est déjà une URL complète
+              imageUrl = firstImage;
+            } else {
+              // Sinon, ajouter le / au début
+              imageUrl = `/${firstImage}`;
+            }
+          }
+
           return {
             ...property,
             rating: average,
             reviewsCount: count,
-            image: property.images?.[0] || 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg'
+            image: imageUrl
           };
         })
       );
