@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://nnkywmfxoohehtyyzzgp.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ua3l3bWZ4b29oZWh0eXl6emdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNDQ3NTcsImV4cCI6MjA2OTcyMDc1N30.VZtsHLfbVks1uLhfnjW6uJSP0-J-Z30-WWT5D_B8Jpk'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
@@ -73,7 +73,7 @@ export type Database = {
           category: string
           neighborhood: string
           beach_access: boolean
-          is_active: boolean
+          is_published: boolean
           created_at: string
           updated_at: string
         }
@@ -102,7 +102,7 @@ export type Database = {
           category: string
           neighborhood: string
           beach_access: boolean
-          is_active?: boolean
+          is_published?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -131,7 +131,7 @@ export type Database = {
           category?: string
           neighborhood?: string
           beach_access?: boolean
-          is_active?: boolean
+          is_published?: boolean
           updated_at?: string
         }
       }

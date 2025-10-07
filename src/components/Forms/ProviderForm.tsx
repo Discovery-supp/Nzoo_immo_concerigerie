@@ -124,8 +124,8 @@ const ProviderForm: React.FC = () => {
   const communes = [
     'Kinshasa', 'Gombe', 'Barumbu', 'Kinshasa Est', 'Lingwala', 'Kintambo',
     'Bandalungwa', 'Kalamu', 'Makala', 'Ngiri-Ngiri', 'Selembao', 'Bumbu',
-    'Makala', 'Mont-Ngafula', 'Ngaliema', 'Lemba', 'Limete', 'Matete',
-    'Ngaba', 'Kalamu', 'Masina', 'Ndjili', 'Nsele', 'Maluku'
+    'Mont-Ngafula', 'Ngaliema', 'Lemba', 'Limete', 'Matete',
+    'Ngaba', 'Masina', 'Ndjili', 'Nsele', 'Maluku'
   ];
 
   const legalForms = [
